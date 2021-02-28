@@ -2,10 +2,10 @@ import time
 from dearpygui.core import *
 from dearpygui.simple import *
 
-from FileController import FileController, export
-from Graph import Graph, topologicalSort
-from Logger import Logger
-from utils import number_to_roman, get_max_rows, get_row
+from FileController_13519134 import FileController, export
+from Graph_13519134 import Graph, topologicalSort
+from Logger_13519134 import Logger
+from utils_13519134 import number_to_roman, get_max_rows, get_row
 
 logger = Logger("primary")
 
