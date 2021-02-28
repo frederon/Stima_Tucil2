@@ -1,0 +1,1 @@
+f = open(r"E:\\STEI\\Sem4\\Stima\\Tucil2\\2021-02-28-13-07-03.txt", "w+")
