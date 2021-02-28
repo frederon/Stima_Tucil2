@@ -11,14 +11,18 @@ logger = Logger("primary")
 
 toExport = []
 
+
 def theme_callback(sender, data):
     set_theme(sender)
+
 
 def file_picker(sender, data):
     open_file_dialog(callback=process_selected_file, extensions=".txt")
 
+
 def directory_picker(sender, data):
     select_directory_dialog(process_file_export)
+
 
 def process_file_export(sender, data):
     directory = data[0]
@@ -28,44 +32,51 @@ def process_file_export(sender, data):
     else:
         output_directory = '\\'.join(data)
 
+    # export to file
     export(output_directory, toExport)
+
     logger.add_log("Export success!")
 
 
 def process_selected_file(sender, data):
-    log_debug(data)
-
     directory = data[0]
     file = data[1]
     filePath = f"{directory}\\{file}"
 
-    set_value("file_path", filePath)
-
+    # read file
     fc = FileController(filePath)
+    # generate graph
     g = Graph(fc.data)
 
     logger.add_log(f"{data[1]} has been loaded!", color=(46, 204, 113))
 
+    # timer start
     startTime = time.time()
 
+    # topological sort to find the solution
     result = topologicalSort(g.data, [])
 
+    # timer end
     endTime = time.time()
 
+    # save the data for the export
     toExport.append([file, result])
 
+    # show result window
     with window(file, autosize=True, horizontal_scrollbar=True):
         sem = range(1, len(result) + 1)
+        # new table with header Semesters with width 100 for every semester
         add_table("table_" + file, ["Semester " +
                                     number_to_roman(s) for s in sem], width=100*len(sem))
 
         max_row = get_max_rows(result)
+        # generate every row
         for i in range(max_row):
             add_row("table_" + file, [res for res in get_row(result, i)])
 
-
     logger.add_log(
         "{} - Total waktu: {:.5f} detik".format(file, endTime-startTime))
+
 
 with window("about.txt", width=350, height=100, x_pos=835, y_pos=15, no_close=True, no_resize=True) as aboutgui:
     add_text("Tugas Kecil 2", color=(255, 195, 0))
